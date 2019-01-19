@@ -25,7 +25,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1>Was That Concert <span role="img">🔥 🔥 🔥</span>?</h1>
+        <h1>That Concert <span role="img">🔥 🔥 🔥</span>?</h1>
         <form onSubmit={this.handleSubmit}>
           <TextField
             id="standard-full-width"

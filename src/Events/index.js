@@ -3,12 +3,16 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import Loading from '../Loading';
 import ErrorMessage from '../Error';
-import { seatgeekClient } from '../index';
+import { setlistClient } from '../index';
 
 const GET_EVENTS = gql`
     query events($path: String!) {
         events @rest(type: "Events", path: $path) {
-            events
+            type
+            setlist {
+                id
+                __typename: id
+            }
         }
     }
 `;
@@ -17,10 +21,10 @@ const Events = ({ artist }) => (
     <Query
         query={GET_EVENTS}
         variables={{
-            path: `events?performers.slug=${artist}&client_id=${process.env.REACT_APP_SEATGEEK_CLIENT_ID}`,
+            path: `search/setlists?artistName=${artist}&p=1`,
         }}
         skip={artist === ''}
-        client={seatgeekClient}
+        client={setlistClient}
     >
         {({ data, loading, error, fetchMore }) => {
             if (error) {
@@ -34,12 +38,12 @@ const Events = ({ artist }) => (
                 return <Loading />;
             }
 
-            if (!data || !data.events || !data.events.events) {
-                return <p>error</p>;
+            if (!data || !data.events) {
+                return <p>No Results...</p>;
             }
 
             return (
-                <p>{data.events.events[0].title}</p>
+                <p>test</p>
             );
         }}
     </Query>
