@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import Loading from '../Loading';
 import ErrorMessage from '../Error';
 import Navigation from '../Navigation';
+import Rating from '../Rating';
 import { setlistClient } from '../index';
 
 import PropTypes from 'prop-types';
@@ -43,6 +44,7 @@ const GET_EVENT = gql`
 // ? TODO Link artist to MusicBrainz Website (mbid)
 // TODO Rating Dictionary
 // TODO Rating Heading
+// TODO Remove material ui styles
 class Event extends Component {
 
     render() {
@@ -81,6 +83,7 @@ class Event extends Component {
                                 <h1>{data.event.tour.name}</h1>
                                 <h2>{data.event.artist.name}</h2>
                                 <h3>{data.event.venue.name}, {data.event.venue.city.name}, {data.event.venue.city.state}</h3>
+                                <Rating emoji="no" number="2" />
                                 {data.event.sets.set.map((setlist, index) => (
                                     <div key={`setlist${index}`}>
                                         <br />
