@@ -3,15 +3,11 @@ import { Link } from 'react-router-dom';
 
 import * as routes from '../constants/routes';
 
-import rallycap from '../Images/rallycapmini.png';
-
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 const styles = theme => ({
     root: {
@@ -35,14 +31,12 @@ const styles = theme => ({
     },
 });
 
-// TODO Performer Logo
 const Grid = ({ events, classes }) => (
     <GridList className={classes.gridList} cols={2.5}>
         {events.setlist.map((event, index) => (
             <GridListTile key={index}>
                 <Link to={`${routes.EVENT}/${event.id}`}>
-
-                    <img src={rallycap} alt={event.tour.name} />
+                    {/* // TODO Redo this, also show date */}
                     <GridListTileBar
                         title={event.tour.name}
                         subtitle={<span>{event.venue.name}, {event.venue.city.name}, {event.venue.city.state}</span>}
@@ -50,11 +44,6 @@ const Grid = ({ events, classes }) => (
                             root: classes.titleBar,
                             title: classes.title,
                         }}
-                    // actionIcon={
-                    //     <IconButton>
-                    //         <StarBorderIcon className={classes.title} />
-                    //     </IconButton>
-                    // }
                     />
                 </Link>
             </GridListTile>

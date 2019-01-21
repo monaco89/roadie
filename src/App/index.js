@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Router, Route } from 'react-router-dom';
+import Events from '../Events';
 import Event from '../Event';
 
 import * as routes from '../constants/routes';
 import history from '../constants/history';
 
-import Events from '../Events';
 import TextField from '@material-ui/core/TextField';
-import Fab from '@material-ui/core/Fab';
 
 import './App.css';
 
+// TODO Better search button
 class App extends Component {
   state = {
     artistName: '',
@@ -37,6 +37,7 @@ class App extends Component {
             path={routes.LANDING}
             component={() => (
               <div className="App">
+                {/* // TODO Fix emoji chrome warning */}
                 <h1>That Concert <span role="img">🔥 🔥 🔥</span>?</h1>
                 <form onSubmit={this.handleSubmit}>
                   <TextField

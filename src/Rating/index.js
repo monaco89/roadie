@@ -9,7 +9,10 @@ const Rating = ({ emoji, number }) => {
     }
 
     return (
-        <h1>{rating}</h1>
+        <div>
+            Rated:
+            <h1>{rating}</h1>
+        </div>
     );
 };
 

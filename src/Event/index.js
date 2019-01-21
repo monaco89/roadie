@@ -15,21 +15,20 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 
 // Testing purposes
 import testEventData from '../test_event_data.json';
 
 const styles = theme => ({
     root: {
-        // width: '50%',
-        // marginTop: theme.spacing.unit * 3,
-        // overflowX: 'auto',
     },
     table: {
-        // minWidth: 700,
+        minWidth: '100%',
     },
 });
 
+// Query setlist id
 const GET_EVENT = gql`
     query event($path: String!) {
         event @rest(type: "Event", path: $path) {
@@ -40,11 +39,12 @@ const GET_EVENT = gql`
     }
 `;
 
+// TODO Query Spotify (Get Several Tracks query) for song popularity, album cover images
+// TODO Query seatgeek for artist popularity score
 // TODO Do something about 'No Tour Assigned' tour name
 // ? TODO Link artist to MusicBrainz Website (mbid)
-// TODO Rating Dictionary
-// TODO Rating Heading
-// TODO Remove material ui styles
+// TODO Rating Dictionary UI
+// ? TODO Remove material ui styles
 class Event extends Component {
 
     render() {
@@ -79,35 +79,43 @@ class Event extends Component {
                         }
 
                         return (
-                            <div>
-                                <h1>{data.event.tour.name}</h1>
-                                <h2>{data.event.artist.name}</h2>
-                                <h3>{data.event.venue.name}, {data.event.venue.city.name}, {data.event.venue.city.state}</h3>
-                                <Rating emoji="no" number="2" />
-                                {data.event.sets.set.map((setlist, index) => (
-                                    <div key={`setlist${index}`}>
-                                        <br />
-                                        <Paper className={classes.root}>
-                                            <Table className={classes.table}>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell>{setlist.encore ? "Encore" : `Setlist ${index + 1}`}</TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {setlist.song.map((song, index) => (
-                                                        <TableRow key={index}>
-                                                            <TableCell component="th" scope="row">
-                                                                {song.name}
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                        </Paper>
-                                    </div>
-                                ))}
-                            </div>
+                            <Grid container>
+                                <Grid item xs={12}>
+                                    <Grid container justify="space-around">
+                                        <Grid key={1} item>
+                                            <h1>{data.event.tour.name}</h1>
+                                            <h2>{data.event.artist.name}</h2>
+                                            <h3>{data.event.venue.name}, {data.event.venue.city.name}, {data.event.venue.city.state}</h3>
+                                            <Rating emoji="no" number="2" />
+                                        </Grid>
+                                        <Grid key={2} item>
+                                            {data.event.sets.set.map((setlist, index) => (
+                                                <div key={`setlist${index}`}>
+                                                    <br />
+                                                    <Paper className={classes.root}>
+                                                        <Table className={classes.table}>
+                                                            <TableHead>
+                                                                <TableRow>
+                                                                    <TableCell>{setlist.encore ? "Encore" : `Setlist ${index + 1}`}</TableCell>
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                {setlist.song.map((song, index) => (
+                                                                    <TableRow key={index}>
+                                                                        <TableCell component="th" scope="row">
+                                                                            {song.name}
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                ))}
+                                                            </TableBody>
+                                                        </Table>
+                                                    </Paper>
+                                                </div>
+                                            ))}
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
                         );
                     }}
                 </Query>
