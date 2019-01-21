@@ -13,21 +13,16 @@ import './App.css';
 // TODO Better search button
 class App extends Component {
   state = {
-    artistName: '',
     queryString: '',
-  };
-
-  onArtistSearch = value => {
-    this.setState({ artistName: value });
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({ queryString: this.state.artistName });
+    this.setState({ queryString: e.target[0].value });
   };
 
   render() {
-    const { artistName, queryString } = this.state;
+    const { queryString } = this.state;
 
     return (
       <Router history={history}>
@@ -49,8 +44,6 @@ class App extends Component {
                     InputLabelProps={{
                       shrink: true,
                     }}
-                    value={artistName}
-                    onChange={(e) => { this.onArtistSearch(e.target.value) }}
                   />
                 </form>
                 <br />

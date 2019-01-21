@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
-// import { HttpLink } from 'apollo-link-http';
+import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { RetryLink } from 'apollo-link-retry';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -16,10 +16,11 @@ import './style.css';
 
 registerServiceWorker();
 
+// TODO Move setlist api calls to server
 const corsProxy = 'https://infinite-sierra-19095.herokuapp.com/';
 
-// setup your `RestLink` with your endpoint
-const restLink = new RestLink({
+// seatlist api, https://api.setlist.fm/docs/1.0/
+const setlistRestLink = new RestLink({
     uri: `${corsProxy}https://api.setlist.fm/rest/1.0/`,
     headers: {
         'x-api-key': `${process.env.REACT_APP_SETLIST_KEY}`,
@@ -27,19 +28,22 @@ const restLink = new RestLink({
     },
 });
 
-const cache = new InMemoryCache();
-
-
-// const GITHUB_BASE_URL = 'https://api.github.com/graphql';
-
-// const httpLink = new HttpLink({
-//     uri: GITHUB_BASE_URL,
+// setup `RestLink` with endpoint
+// const spotifyRestLink = new RestLink({
+//     uri: `https://api.spotify.com/v1/`,
 //     headers: {
-//         authorization: `Bearer ${
-//             process.env.SEATGEEK_API_TOKEN
-//             }`,
+//         Authorization: `Bearer ${process.env.REACT_APP_SPOTIFY_CLIENT_SECRET}`,
+//         Accept: 'application/json',
+//         'Content-type': 'application/json',
 //     },
 // });
+
+// local server
+const httpLink = new HttpLink({
+    uri: 'http://localhost:8000/graphql',
+});
+
+const cache = new InMemoryCache();
 
 const errorLink = onError(({ graphQLError, networkError }) => {
     if (graphQLError) {
@@ -68,23 +72,30 @@ const retryLink = new RetryLink();
   });
 */
 
-const link = ApolloLink.from([errorLink, retryLink, restLink]);
+const setlistLink = ApolloLink.from([errorLink, retryLink, setlistRestLink]);
 
-// seatlist api, https://api.setlist.fm/docs/1.0/
 export const setlistClient = new ApolloClient({
+    link: setlistLink,
+    cache,
+});
+
+// const spotifyLink = ApolloLink.from([errorLink, retryLink, spotifyRestLink]);
+
+// export const spotifyClient = new ApolloClient({
+//     link: spotifyLink,
+//     cache
+// });
+
+const link = ApolloLink.from([errorLink, retryLink, httpLink]);
+
+export const client = new ApolloClient({
     link,
     cache,
 });
 
-// const client = new ApolloClient({
-//     link,
-//     cache,
-// });
-
 ReactDOM.render(
-    // <ApolloProvider client={client}>
-    //     <App />
-    // </ApolloProvider>,
-    <App />,
+    <ApolloProvider client={client}>
+        <App />
+    </ApolloProvider>,
     document.getElementById('root')
 );

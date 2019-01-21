@@ -39,12 +39,32 @@ const GET_EVENT = gql`
     }
 `;
 
-// TODO Query Spotify (Get Several Tracks query) for song popularity, album cover images
+const GET_TRACK = gql`
+    query track($path: String!) {
+        tracks @rest(type: "Tracks", path: $path) {
+            tracks @type(name: "Tracks") {
+                items @type(name: "track") {
+                    popularity
+                    href
+                    uri
+                    id
+                    album @type(name: "album") {
+                        name
+                        images @type(name: "album_images") {
+                            url
+                        }
+                    }
+                }
+            }
+        }
+    }
+`;
+
 // TODO Query seatgeek for artist popularity score
 // TODO Do something about 'No Tour Assigned' tour name
 // ? TODO Link artist to MusicBrainz Website (mbid)
 // TODO Rating Dictionary UI
-// ? TODO Remove material ui styles
+// TODO Remove material ui styles, use css files
 class Event extends Component {
 
     render() {
@@ -103,8 +123,46 @@ class Event extends Component {
                                                                 {setlist.song.map((song, index) => (
                                                                     <TableRow key={index}>
                                                                         <TableCell component="th" scope="row">
+                                                                            {/* <img src={data.tracks.tracks.items[0].album.images[0].url} alt={data.tracks.tracks.items[0].album.name} height="40" width="40" /> */}
                                                                             {song.name}
+                                                                            {song.cover ? "cover" : ""}
                                                                         </TableCell>
+                                                                        {/*<Query
+                                                                            query={GET_TRACK}
+                                                                            variables={{
+                                                                                path: `search?q=${song.name}+${song.cover ? song.cover.name : data.event.artist.name}&type=track&limit=1`,
+                                                                            }}
+                                                                            client={spotifyClient}
+                                                                        >
+                                                                            {({ data, loading, error }) => {
+                                                                                if (error) {
+                                                                                    console.log("error", error)
+                                                                                    return <ErrorMessage error={error} />;
+                                                                                }
+
+                                                                                console.log("track data", data);
+
+                                                                                if (loading) {
+                                                                                    return <Loading />;
+                                                                                }
+
+                                                                                if (!data) {
+                                                                                    return (
+                                                                                        <TableCell component="th" scope="row">
+                                                                                            {song.name}
+                                                                                        </TableCell>
+                                                                                    );
+                                                                                }
+
+                                                                                return (
+                                                                                    <TableCell component="th" scope="row">
+                                                                                        <img src={data.tracks.tracks.items[0].album.images[0].url} alt={data.tracks.tracks.items[0].album.name} height="40" width="40" />
+                                                                                        {song.name}
+                                                                                        {song.cover ? "cover" : ""}
+                                                                                    </TableCell>
+                                                                                );
+                                                                            }}
+                                                                        </Query>*/}
                                                                     </TableRow>
                                                                 ))}
                                                             </TableBody>
