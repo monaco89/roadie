@@ -7,7 +7,7 @@ import Map from '../Map';
 import { setlistClient } from '../index';
 
 // Testing purposes
-import testData from '../test_data.json';
+// import testData from '../test_data.json';
 
 const GET_EVENTS = gql`
     query events($path: String!) {

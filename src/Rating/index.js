@@ -2,9 +2,9 @@ import React from 'react';
 
 import * as ratings from '../constants/ratings';
 
-const Rating = ({ emoji, number }) => {
+const Rating = ({ emoji, count }) => {
     let rating = '';
-    for (let i = 0; i < number; i++) {
+    for (let i = 0; i < count; i++) {
         rating = rating.concat(ratings[emoji]);
     }
 
