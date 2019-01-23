@@ -8,6 +8,7 @@ import { onError } from 'apollo-link-error';
 import { RetryLink } from 'apollo-link-retry';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { RestLink } from 'apollo-link-rest';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import registerServiceWorker from './registerServiceWorker';
 import App from './App';
@@ -27,16 +28,6 @@ const setlistRestLink = new RestLink({
         'Accept': 'application/json',
     },
 });
-
-// setup `RestLink` with endpoint
-// const spotifyRestLink = new RestLink({
-//     uri: `https://api.spotify.com/v1/`,
-//     headers: {
-//         Authorization: `Bearer ${process.env.REACT_APP_SPOTIFY_CLIENT_SECRET}`,
-//         Accept: 'application/json',
-//         'Content-type': 'application/json',
-//     },
-// });
 
 // local server
 const httpLink = new HttpLink({
@@ -78,13 +69,6 @@ export const setlistClient = new ApolloClient({
     link: setlistLink,
     cache,
 });
-
-// const spotifyLink = ApolloLink.from([errorLink, retryLink, spotifyRestLink]);
-
-// export const spotifyClient = new ApolloClient({
-//     link: spotifyLink,
-//     cache
-// });
 
 const link = ApolloLink.from([errorLink, retryLink, httpLink]);
 

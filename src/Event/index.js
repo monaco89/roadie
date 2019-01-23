@@ -9,16 +9,19 @@ import { setlistClient } from '../index';
 
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import ImageIcon from '@material-ui/icons/Image';
+
 // Testing purposes
 import testEventData from '../test_event_data.json';
+
+import './Event.css';
 
 const styles = theme => ({
     root: {
@@ -39,21 +42,21 @@ const GET_EVENT = gql`
     }
 `;
 
-const GET_TRACK = gql`
-    query track($path: String!) {
-        tracks @rest(type: "Tracks", path: $path) {
-            tracks @type(name: "Tracks") {
-                items @type(name: "track") {
-                    popularity
-                    href
-                    uri
-                    id
-                    album @type(name: "album") {
+const GET_TRACKS = gql`
+    query($q: String!, $limit: String!) {
+        searchTracks(q: $q, limit: $limit) {
+            tracks {
+                items {
+                    artists {
                         name
-                        images @type(name: "album_images") {
+                    }
+                    name
+                    album {
+                        images {
                             url
                         }
                     }
+                    popularity
                 }
             }
         }
@@ -83,6 +86,10 @@ class Event extends Component {
                     client={setlistClient}
                 >
                     {({ data, loading, error }) => {
+                        if (loading) {
+                            return <Loading />;
+                        }
+
                         if (error) {
                             console.log("error", error)
                             return <ErrorMessage error={error} />;
@@ -93,10 +100,6 @@ class Event extends Component {
                         data.event = testEventData;
 
                         console.log("event data", data);
-
-                        if (loading) {
-                            return <Loading />;
-                        }
 
                         return (
                             <Grid container>
@@ -113,60 +116,48 @@ class Event extends Component {
                                                 <div key={`setlist${index}`}>
                                                     <br />
                                                     <Paper className={classes.root}>
-                                                        <Table className={classes.table}>
-                                                            <TableHead>
-                                                                <TableRow>
-                                                                    <TableCell>{setlist.encore ? "Encore" : `Setlist ${index + 1}`}</TableCell>
-                                                                </TableRow>
-                                                            </TableHead>
-                                                            <TableBody>
-                                                                {setlist.song.map((song, index) => (
-                                                                    <TableRow key={index}>
-                                                                        <TableCell component="th" scope="row">
-                                                                            {/* <img src={data.tracks.tracks.items[0].album.images[0].url} alt={data.tracks.tracks.items[0].album.name} height="40" width="40" /> */}
-                                                                            {song.name}
-                                                                            {song.cover ? "cover" : ""}
-                                                                        </TableCell>
-                                                                        {/*<Query
-                                                                            query={GET_TRACK}
-                                                                            variables={{
-                                                                                path: `search?q=${song.name}+${song.cover ? song.cover.name : data.event.artist.name}&type=track&limit=1`,
-                                                                            }}
-                                                                            client={spotifyClient}
-                                                                        >
-                                                                            {({ data, loading, error }) => {
-                                                                                if (error) {
-                                                                                    console.log("error", error)
-                                                                                    return <ErrorMessage error={error} />;
-                                                                                }
+                                                        <h4 className="trackList">{setlist.encore ? "Encore" : `Setlist ${index + 1}`}</h4>
+                                                        <List>
+                                                            {setlist.song.map((song, index) => (
+                                                                <Query
+                                                                    query={GET_TRACKS}
+                                                                    variables={{
+                                                                        q: `${song.name}`,
+                                                                        limit: "1",
+                                                                    }}
+                                                                >
+                                                                    {({ data, loading, error }) => {
+                                                                        if (loading) {
+                                                                            return <Loading />;
+                                                                        }
 
-                                                                                console.log("track data", data);
+                                                                        if (error) {
+                                                                            console.log("error", error)
+                                                                            return <ErrorMessage error={error} />;
+                                                                        }
 
-                                                                                if (loading) {
-                                                                                    return <Loading />;
-                                                                                }
+                                                                        console.log("track data", data);
 
-                                                                                if (!data) {
-                                                                                    return (
-                                                                                        <TableCell component="th" scope="row">
-                                                                                            {song.name}
-                                                                                        </TableCell>
-                                                                                    );
-                                                                                }
+                                                                        if (!data) {
+                                                                            return (
+                                                                                song.name
+                                                                            );
+                                                                        }
 
-                                                                                return (
-                                                                                    <TableCell component="th" scope="row">
-                                                                                        <img src={data.tracks.tracks.items[0].album.images[0].url} alt={data.tracks.tracks.items[0].album.name} height="40" width="40" />
-                                                                                        {song.name}
-                                                                                        {song.cover ? "cover" : ""}
-                                                                                    </TableCell>
-                                                                                );
-                                                                            }}
-                                                                        </Query>*/}
-                                                                    </TableRow>
-                                                                ))}
-                                                            </TableBody>
-                                                        </Table>
+                                                                        // TODO Display album name
+                                                                        // TODO Default album image <ImageIcon />
+                                                                        return (
+                                                                            <ListItem key={index}>
+                                                                                <Avatar>
+                                                                                    <img src={data.searchTracks.tracks.items[0].album.images[0].url} alt={data.searchTracks.tracks.items[0].album.name} height="40" width="40" />
+                                                                                </Avatar>
+                                                                                <ListItemText primary={song.name} secondary={song.cover ? ` (by ${song.cover.name})` : ""} />
+                                                                            </ListItem>
+                                                                        );
+                                                                    }}
+                                                                </Query>
+                                                            ))}
+                                                        </List>
                                                     </Paper>
                                                 </div>
                                             ))}

@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import Loading from '../Loading';
 import ErrorMessage from '../Error';
-import Grid from '../Grid';
+import Map from '../Map';
 import { setlistClient } from '../index';
 
 // Testing purposes
@@ -13,51 +13,61 @@ const GET_EVENTS = gql`
     query events($path: String!) {
         events @rest(type: "Events", path: $path) {
             setlist @type(name: "setlist"){
+                id
+                eventDate
                 tour @type(name: "tour"){
                     name
                 }
                 artist @type(name: "artist") {
-                    mbid
                     name
+                }
+                venue @type(name: "venue") {
+                    name
+                    city @type(name: "city") {
+                        name
+                        state
+                        coords @type(name: "coords") {
+                            lat
+                            long
+                        }
+                    }
                 }
             }
         }
     }
 `;
 
-const Events = ({ artist, classes }) => (
+const Events = ({ artist }) => (
     <Query
         query={GET_EVENTS}
         variables={{
             path: `search/setlists?artistName=${artist}&p=1`,
         }}
-        // skip={artist === ''}
-        skip={true}
+        skip={artist === ''}
+        // skip={true}
         client={setlistClient}
     >
-        {({ data, loading, error, fetchMore }) => {
+        {({ data, loading, error }) => {
+            if (loading) {
+                return <Loading />;
+            }
+
             if (error) {
                 console.log("error", error)
                 return <ErrorMessage error={error} />;
             }
 
             // Testing purposes
-            data = testData;
+            // data = testData;
 
             console.log("data", data);
-
-
-
-            if (loading) {
-                return <Loading />;
-            }
 
             if (!data || data.total === 0) {
                 return <p>No Results...</p>;
             }
 
             return (
-                <Grid events={data} />
+                <Map events={data} />
             );
         }}
     </Query>
