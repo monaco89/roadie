@@ -28,13 +28,14 @@ const GET_EVENT = gql`
 
 class Event extends Component {
     state = {
-        rating: {
-            emoji: 'no',
-            number: '2',
-        }
+        'score': 0,
     };
 
-    _renderRating = (totalSongs = 10, score = 803, emoji = 'no') => {
+    _updateScore = (score) => {
+        this.setState({ score: score });
+    }
+
+    _renderRating = (totalSongs = 1, score = 1, emoji = 'no') => {
         const rating = score / totalSongs;
 
         // TODO Improve
@@ -47,6 +48,8 @@ class Event extends Component {
         }
 
         const count = rating.toString().split('').pop() === '0' ? 1 : Math.ceil(Number(rating.toString().split('').pop()) / 2);
+
+        // console.log(totalSongs, score, count);
 
         return (
             <Rating emoji={emoji} count={count} />
@@ -91,11 +94,18 @@ class Event extends Component {
                                             <h1>{data.event.tour.name}</h1>
                                             <h2>{data.event.artist.name}</h2>
                                             <h3>{data.event.venue.name}, {data.event.venue.city.name}, {data.event.venue.city.state}</h3>
-                                            {this._renderRating()}
+                                            {this._renderRating(data.event.sets.set.reduce((total, set) => {
+                                                return total += set.song.length
+                                            }, 0))}
                                         </Grid>
                                         <Grid key={2} item>
                                             {data.event.sets.set.map((setlist, index) => (
-                                                <Setlist setlist={setlist} key={index} id={index} />
+                                                <Setlist 
+                                                    setlist={setlist} 
+                                                    artist={data.event.artist.name} 
+                                                    key={index} 
+                                                    id={index} 
+                                                />
                                             ))}
                                         </Grid>
                                     </Grid>

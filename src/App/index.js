@@ -32,8 +32,7 @@ class App extends Component {
             path={routes.LANDING}
             component={() => (
               <div className="App">
-                {/* // TODO Fix emoji chrome warning */}
-                <h1>That Concert <span role="img">🔥 🔥 🔥</span>?</h1>
+                <h1>That Concert <span role="img" aria-label="fire">🔥 🔥 🔥</span>?</h1>
                 <form onSubmit={this.handleSubmit}>
                   <TextField
                     id="standard-full-width"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import Loading from '../Loading';
@@ -22,7 +22,7 @@ const styles = theme => ({
     },
 });
 
-const GET_TRACKS = gql`
+const GET_TRACK = gql`
     query($q: String!, $limit: String!) {
         searchTracks(q: $q, limit: $limit) {
             tracks {
@@ -43,60 +43,88 @@ const GET_TRACKS = gql`
     }
 `;
 
-const Setlist = ({ setlist, id, setRating, classes }) => (
-    <div key={`setlist${id}`}>
-        <br />
-        <Paper className={classes.root}>
-            <h4 className="trackList">{setlist.encore ? "Encore" : `Setlist ${id + 1}`}</h4>
-            <List>
-                {setlist.song.map((song, index) => (
-                    <Query
-                        query={GET_TRACKS}
-                        variables={{
-                            q: `${song.name}`,
-                            limit: "1",
-                        }}
-                        skip={true}
-                        key={`query${index}`}
-                    >
-                        {({ data, loading, error }) => {
-                            if (loading) {
-                                return <Loading />;
-                            }
+const GET_TRACKS = gql`
+    query($q: [String!]) {
+        searchMultipleTracks(q: $q) {
+            tracks {
+                items {
+                    artists {
+                        name
+                    }
+                    name
+                    album {
+                        name
+                        images {
+                            url
+                        }
+                    }
+                    popularity
+                }
+            }
+        }
+    }
+`;
 
-                            if (error) {
-                                console.log("error", error)
-                                return <ErrorMessage error={error} />;
-                            }
+class Setlist extends Component {
+    state = {
+        q: '',
+    };
 
-                            console.log("track data", data);
+    componentDidMount() {
+        const { setlist, artist } = this.props;
 
-                            if (!data) {
-                                return (
+        const q = setlist.song.map((track) => {
+            return track.cover ? track.name + ' ' + track.cover.name : track.name + ' ' + artist;
+        })
+
+        this.setState({ q: q });
+    }
+
+    render() {
+        const { setlist, artist, id, classes } = this.props;
+        const { q } = this.state;
+
+        return (
+            <div key={`setlist${id}`}>
+                <Paper className={classes.root}>
+                    <h4 className="trackList">{setlist.encore ? "Encore" : `Setlist ${id + 1}`}</h4>
+                    <List>
+                        <Query
+                            query={GET_TRACKS}
+                            variables={{
+                                q: q,
+                            }}
+                            skip={q === ''}
+                        >
+                            {({ data, loading, error }) => {
+                                // TODO Handle no data
+                                if (loading || !data) {
+                                    return <Loading />;
+                                }
+
+                                if (error) {
+                                    console.log("error", error)
+                                    return <ErrorMessage error={error} />;
+                                }
+
+                                console.log("track data", data);
+
+                                return data.searchMultipleTracks.map((song, index) => (
                                     <ListItem key={index}>
                                         <Avatar>
-                                            <ImageIcon />
+                                            <img src={song.tracks.items[0].album.images[0].url} alt={song.tracks.items[0].album.name} height="40" width="40" />
                                         </Avatar>
-                                        <ListItemText primary={song.name} secondary={song.cover ? ` (by ${song.cover.name})` : ""} />
+                                        <ListItemText primary={song.tracks.items[0].name} secondary={song.tracks.items[0].artists[0].name !== artist ? ` (by ${song.tracks.items[0].artists[0].name})` : song.tracks.items[0].album.name} />
                                     </ListItem>
-                                );
-                            }
-
-                            return (
-                                <ListItem key={index}>
-                                    <Avatar>
-                                        <img src={data.searchTracks.tracks.items[0].album.images[0].url} alt={data.searchTracks.tracks.items[0].album.name} height="40" width="40" />
-                                    </Avatar>
-                                    <ListItemText primary={song.name} secondary={song.cover ? ` (by ${song.cover.name})` : data.searchTracks.tracks.items[0].album.name} />
-                                </ListItem>
-                            );
-                        }}
-                    </Query>
-                ))}
-            </List>
-        </Paper>
-    </div>
-);
+                                ));
+                            }}
+                        </Query>
+                    </List>
+                </Paper>
+            </div>
+        );
+    }
+}
 
 Setlist.propTypes = {
     classes: PropTypes.object.isRequired,

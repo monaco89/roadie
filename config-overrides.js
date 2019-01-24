@@ -1,4 +1,4 @@
-const { InjectBabelPlugin } = require('react-app-rewuired');
+const { InjectBabelPlugin } = require('react-app-rewired');
 
 // Override create-react-app settings without ejecting
 
