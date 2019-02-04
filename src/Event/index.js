@@ -3,7 +3,6 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import Loading from '../Loading';
 import ErrorMessage from '../Error';
-import Navigation from '../Navigation';
 import Rating from '../Rating';
 import Setlist from '../Setlist';
 import { setlistClient } from '../index';
@@ -77,57 +76,54 @@ class Event extends Component {
         const { id } = this.props.match.params;
 
         return (
-            <div>
-                <Navigation />
-                <Query
-                    query={GET_EVENT}
-                    variables={{
-                        path: `setlist/${id}`,
-                    }}
-                    // skip={true}
-                    client={setlistClient}
-                >
-                    {({ data, loading, error }) => {
-                        if (loading) {
-                            return <Loading />;
-                        }
+            <Query
+                query={GET_EVENT}
+                variables={{
+                    path: `setlist/${id}`,
+                }}
+                // skip={true}
+                client={setlistClient}
+            >
+                {({ data, loading, error }) => {
+                    if (loading) {
+                        return <Loading />;
+                    }
 
-                        if (error) {
-                            console.log("error", error)
-                            return <ErrorMessage error={error} />;
-                        }
+                    if (error) {
+                        console.log("error", error)
+                        return <ErrorMessage error={error} />;
+                    }
 
-                        return (
-                            <Grid container>
-                                <Grid item xs={12}>
-                                    <Grid container justify="space-around">
-                                        <Grid className="info" key={1} item>
-                                            <h1>{data.event.tour.name}</h1>
-                                            <h2>{data.event.artist.name}</h2>
-                                            {/* // TODO show date */}
-                                            <h3>{data.event.venue.name}, {data.event.venue.city.name}, {data.event.venue.city.state}</h3>
-                                            {/* this.renderRating(data.event.sets.set.reduce((total, set) => {
+                    return (
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <Grid container justify="space-around">
+                                    <Grid className="info" key={1} item>
+                                        <h1>{data.event.tour.name}</h1>
+                                        <h2>{data.event.artist.name}</h2>
+                                        {/* // TODO show date */}
+                                        <h3>{data.event.venue.name}, {data.event.venue.city.name}, {data.event.venue.city.state}</h3>
+                                        {/* this.renderRating(data.event.sets.set.reduce((total, set) => {
                                                 return total += set.song.length
                                             }, 0)) */}
-                                        </Grid>
-                                        <Grid key={2} item>
-                                            {data.event.sets.set.map((setlist, index) => (
-                                                <Setlist
-                                                    setlist={setlist}
-                                                    artist={data.event.artist.name}
-                                                    key={index}
-                                                    id={index}
-                                                    renderRating={this.renderRating}
-                                                />
-                                            ))}
-                                        </Grid>
+                                    </Grid>
+                                    <Grid key={2} item>
+                                        {data.event.sets.set.map((setlist, index) => (
+                                            <Setlist
+                                                setlist={setlist}
+                                                artist={data.event.artist.name}
+                                                key={index}
+                                                id={index}
+                                                renderRating={this.renderRating}
+                                            />
+                                        ))}
                                     </Grid>
                                 </Grid>
                             </Grid>
-                        );
-                    }}
-                </Query>
-            </div>
+                        </Grid>
+                    );
+                }}
+            </Query>
         );
     }
 };

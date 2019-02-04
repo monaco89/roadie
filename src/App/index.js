@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Router, Route } from 'react-router-dom';
+import Navigation from '../Navigation';
 import Events from '../Events';
 import Event from '../Event';
 
@@ -23,10 +24,11 @@ class App extends Component {
 
   render() {
     const { queryString } = this.state;
-
+    document.title = "This Concert Fire";
     return (
       <Router history={history}>
         <div>
+          <Navigation />
           <Route
             exact
             path={routes.LANDING}
