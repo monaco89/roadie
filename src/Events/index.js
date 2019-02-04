@@ -6,9 +6,6 @@ import ErrorMessage from '../Error';
 import Map from '../Map';
 import { setlistClient } from '../index';
 
-// Testing purposes
-// import testData from '../test_data.json';
-
 const GET_EVENTS = gql`
     query events($path: String!) {
         events @rest(type: "Events", path: $path) {
@@ -44,7 +41,6 @@ const Events = ({ artist }) => (
             path: `search/setlists?artistName=${artist}&p=1`,
         }}
         skip={artist === ''}
-        // skip={true}
         client={setlistClient}
     >
         {({ data, loading, error }) => {
@@ -56,9 +52,6 @@ const Events = ({ artist }) => (
                 console.log("error", error)
                 return <ErrorMessage error={error} />;
             }
-
-            // Testing purposes
-            // data = testData;
 
             console.log("data", data);
 

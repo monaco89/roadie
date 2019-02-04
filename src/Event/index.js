@@ -10,17 +10,35 @@ import { setlistClient } from '../index';
 
 import Grid from '@material-ui/core/Grid';
 
-// Testing purposes
-import testEventData from '../test_event_data.json';
-
 import './Event.css';
 
 // Query setlist id
 const GET_EVENT = gql`
     query event($path: String!) {
         event @rest(type: "Event", path: $path) {
-            tour @type(name: "tour"){
+            tour @type(name: "tour") {
                 name
+            }
+            artist @type(name: "artist") {
+                name
+            }
+            sets @type(name: "sets") {
+                set @type(name: "set") {
+                    song @type(name: "song") {
+                        name
+                        cover @type(name: "song_cover") {
+                            name
+                        }
+                    }
+                    encore
+                }
+            }
+            venue @type(name: "venue") {
+                name
+                city @type(name: "venue_city") {
+                    name
+                    state
+                }
             }
         }
     }
@@ -31,28 +49,27 @@ class Event extends Component {
         'score': 0,
     };
 
-    _updateScore = (score) => {
-        this.setState({ score: score });
-    }
-
-    _renderRating = (totalSongs = 1, score = 1, emoji = 'no') => {
+    renderRating = (totalSongs = 1, score = 0, el = "h1", emoji = 'no') => {
         const rating = score / totalSongs;
 
-        // TODO Improve
-        if (rating >= 90) {
+        // TODO Improve Scoring
+        if (score >= 90) {
             emoji = 'fire';
-        } else if (rating <= 89 && rating >= 75) {
+        }
+        else if (score <= 89 && score >= 75) {
             emoji = 'slaps';
-        } else if (74 >= rating >= 62) {
+        }
+        else if (score <= 74) {
             emoji = 'idk';
+        }
+        else if (score === 0) {
+            console.log("error showing rating or event was a dumpster fire");
         }
 
         const count = rating.toString().split('').pop() === '0' ? 1 : Math.ceil(Number(rating.toString().split('').pop()) / 2);
 
-        // console.log(totalSongs, score, count);
-
         return (
-            <Rating emoji={emoji} count={count} />
+            <Rating emoji={emoji} count={count} el={el} />
         );
     }
 
@@ -67,7 +84,7 @@ class Event extends Component {
                     variables={{
                         path: `setlist/${id}`,
                     }}
-                    skip={true}
+                    // skip={true}
                     client={setlistClient}
                 >
                     {({ data, loading, error }) => {
@@ -80,12 +97,6 @@ class Event extends Component {
                             return <ErrorMessage error={error} />;
                         }
 
-                        // Testing purposes
-                        data = {};
-                        data.event = testEventData;
-
-                        console.log("event data", data);
-
                         return (
                             <Grid container>
                                 <Grid item xs={12}>
@@ -93,18 +104,20 @@ class Event extends Component {
                                         <Grid className="info" key={1} item>
                                             <h1>{data.event.tour.name}</h1>
                                             <h2>{data.event.artist.name}</h2>
+                                            {/* // TODO show date */}
                                             <h3>{data.event.venue.name}, {data.event.venue.city.name}, {data.event.venue.city.state}</h3>
-                                            {this._renderRating(data.event.sets.set.reduce((total, set) => {
+                                            {/* this.renderRating(data.event.sets.set.reduce((total, set) => {
                                                 return total += set.song.length
-                                            }, 0))}
+                                            }, 0)) */}
                                         </Grid>
                                         <Grid key={2} item>
                                             {data.event.sets.set.map((setlist, index) => (
-                                                <Setlist 
-                                                    setlist={setlist} 
-                                                    artist={data.event.artist.name} 
-                                                    key={index} 
-                                                    id={index} 
+                                                <Setlist
+                                                    setlist={setlist}
+                                                    artist={data.event.artist.name}
+                                                    key={index}
+                                                    id={index}
+                                                    renderRating={this.renderRating}
                                                 />
                                             ))}
                                         </Grid>
