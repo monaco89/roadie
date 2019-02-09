@@ -10,9 +10,12 @@ import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import Avatar from '@material-ui/core/Avatar';
 import ImageIcon from '@material-ui/icons/Image';
 import Button from '@material-ui/core/Button';
+
+import "./setlist.css";
 
 const styles = theme => ({
     root: {
@@ -116,9 +119,13 @@ class Setlist extends Component {
                         }
 
                         return <Paper className={classes.root}>
-                            <h4 className="trackList">{setlist.encore ? "Encore" : `Setlist ${id + 1}`}</h4>
-                            <List>
-                                {data.searchMultipleTracks[0] ? renderRating(data.searchMultipleTracks.length, data.searchMultipleTracks[0].meta.rating, "p") : ''}
+                            <h2 className="trackList">{setlist.encore ? "Encore" : `Setlist ${id + 1}`}</h2>
+                            <List className="setlistList">
+                                <ListSubheader>Duration: {Math.floor(data.searchMultipleTracks.reduce((total, song) => {
+                                    return total += song.tracks.items[0].duration_ms
+                                }, 0) / 60000)} minutes
+                                </ListSubheader>
+                                {data.searchMultipleTracks[0] ? renderRating(data.searchMultipleTracks.length, data.searchMultipleTracks[0].meta.rating, "h2") : ''}
                                 {data.searchMultipleTracks.map((song, index) => (
                                     <ListItem key={index}>
                                         <Avatar>

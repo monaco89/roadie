@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
+import moment from 'moment';
 import Loading from '../Loading';
 import ErrorMessage from '../Error';
 import Rating from '../Rating';
@@ -39,6 +40,7 @@ const GET_EVENT = gql`
                     state
                 }
             }
+            eventDate
         }
     }
 `;
@@ -97,12 +99,17 @@ class Event extends Component {
                     return (
                         <Grid container>
                             <Grid item xs={12}>
-                                <Grid container justify="space-around">
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="space-around"
+                                >
                                     <Grid className="info" key={1} item>
                                         <h1>{data.event.tour.name}</h1>
                                         <h2>{data.event.artist.name}</h2>
                                         {/* // TODO show date */}
                                         <h3>{data.event.venue.name}, {data.event.venue.city.name}, {data.event.venue.city.state}</h3>
+                                        <h2>{moment(data.event.eventDate, "DD-MM-YYYY").format("MMM DD YYYY")}</h2>
                                         {/* this.renderRating(data.event.sets.set.reduce((total, set) => {
                                                 return total += set.song.length
                                             }, 0)) */}

@@ -8,7 +8,7 @@ const Rating = ({ emoji, count, el = "h1" }) => {
         rating = rating.concat(`${ratings[emoji]}`);
     }
 
-    return React.createElement(el, {}, <span role="img" aria-label={String(emoji)}>{rating}</span>);
+    return React.createElement(el, {}, <span role="img" className="rating" aria-label={String(emoji)}>{rating}</span>);
 };
 
 export default Rating;
