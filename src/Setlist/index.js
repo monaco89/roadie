@@ -139,9 +139,9 @@ class Setlist extends Component {
                                             }
                                         </Avatar>
                                         <ListItemText
-                                            primary={song.tracks.items[0].name}
+                                            primary={song.tracks.items[0].name.length > 55 ? song.tracks.items[0].name.substr(0, 52) + "..." : song.tracks.items[0].name}
                                             secondary={song.tracks.items[0].artists[0].name !== artist ?
-                                                ` (by ${song.tracks.items[0].artists[0].name})` : song.tracks.items[0].album.name}
+                                                ` (cover by ${song.tracks.items[0].artists[0].name})` : song.tracks.items[0].album.name}
                                         />
                                         <Button variant="outlined" href={song.tracks.items[0].spotify_url} className="button">
                                             View on Spotify
