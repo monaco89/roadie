@@ -12,12 +12,16 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import ImageIcon from '@material-ui/icons/Image';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
     root: {
     },
     table: {
         minWidth: '100%',
+    },
+    button: {
+        margin: theme.spacing.unit,
     },
 });
 
@@ -58,6 +62,8 @@ const GET_TRACKS = gql`
                         }
                     }
                     popularity
+                    duration_ms
+                    spotify_url
                 }
             }
             meta {
@@ -78,8 +84,6 @@ class Setlist extends Component {
         const q = setlist.song.map((track) => {
             return track.cover ? track.name + ' ' + track.cover.name : track.name + ' ' + artist;
         });
-
-        console.log(q);
 
         this.setState({ q: q });
     }
@@ -132,6 +136,9 @@ class Setlist extends Component {
                                             secondary={song.tracks.items[0].artists[0].name !== artist ?
                                                 ` (by ${song.tracks.items[0].artists[0].name})` : song.tracks.items[0].album.name}
                                         />
+                                        <Button variant="outlined" href={song.tracks.items[0].spotify_url} className="button">
+                                            View on Spotify
+                                        </Button>
                                     </ListItem>
                                 ))}
                             </List>
