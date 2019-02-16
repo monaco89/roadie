@@ -2,3 +2,11 @@
     text-decoration: none;
     font-size: 1.5em;
 }
+
+.navbar a:hover {
+    text-decoration: underline #EB4C28;
+}
+
+.navbar div {
+    float: right;
+}

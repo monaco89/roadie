@@ -4,7 +4,8 @@ import { ApolloConsumer } from 'react-apollo';
 import * as routes from '../constants/routes';
 import history from '../constants/history';
 
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import ExitToApp from '@material-ui/icons/ExitToApp';
 
 const signOut = client => {
     localStorage.removeItem('token');
@@ -15,14 +16,13 @@ const signOut = client => {
 const SignOutButton = () => (
     <ApolloConsumer>
         {client => (
-            <Button
-                variant="contained"
-                color="primary"
+            <IconButton
+                aria-label="Logout"
                 type="button"
                 onClick={() => signOut(client)}
             >
-                Logout
-        </Button>
+                <ExitToApp fontSize="small" />
+            </IconButton>
         )}
     </ApolloConsumer>
 );

@@ -9,7 +9,6 @@ import "./Navigation.css";
 // TODO 'Search' button
 // TODO Float right second link
 const Navigation = ({ session }) => (
-    console.log(session),
     <div>
         {session && session.me ? (
             <NavigationAuth session={session} />
@@ -22,8 +21,10 @@ const Navigation = ({ session }) => (
 const NavigationAuth = ({ session }) => (
     <div className="navbar">
         <Link to={routes.LANDING}><span role="img" aria-label="fire">🔥 </span></Link>
-        <Link to={routes.ACCOUNT}>{session.me.email}</Link>
-        <SignOutButton />
+        <div>
+            <Link to={routes.ACCOUNT}>{session.me.email.substring(0, session.me.email.indexOf('@'))}</Link>
+            <SignOutButton />
+        </div>
     </div>
 )
 
