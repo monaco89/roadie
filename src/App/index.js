@@ -3,6 +3,9 @@ import { Router, Route } from 'react-router-dom';
 import Navigation from '../Navigation';
 import Events from '../Events';
 import Event from '../Event';
+import SignIn from '../SignIn';
+import SignUp from '../SignUp';
+import withSession from '../Session/withSession';
 
 import * as routes from '../constants/routes';
 import history from '../constants/history';
@@ -24,11 +27,13 @@ class App extends Component {
 
   render() {
     const { queryString } = this.state;
+    const { session, refetch } = this.props;
     document.title = "This Concert Fire";
+
     return (
       <Router history={history}>
         <div>
-          <Navigation />
+          <Navigation session={session} />
           <Route
             exact
             path={routes.LANDING}
@@ -52,10 +57,20 @@ class App extends Component {
               </div>
             )} />
           <Route path={`${routes.EVENT}/:id`} exact component={Event} />
+          <Route
+            path={routes.SIGN_IN}
+            exact
+            component={() => <SignIn refetch={refetch} />}
+          />
+          <Route
+            path={routes.SIGN_UP}
+            exact
+            component={() => <SignUp refetch={refetch} />}
+          />
         </div>
       </Router>
     );
   }
 }
 
-export default App;
+export default withSession(App);

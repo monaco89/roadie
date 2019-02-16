@@ -2,7 +2,7 @@ import React from 'react';
 import { ApolloConsumer } from 'react-apollo';
 
 import * as routes from '../constants/routes';
-import history from '../history';
+import history from '../constants/history';
 
 import Button from '@material-ui/core/Button';
 

@@ -12,6 +12,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import registerServiceWorker from './registerServiceWorker';
 import App from './App';
+import { signOut } from './SignOut';
 
 import './style.css';
 
@@ -34,20 +35,38 @@ const httpLink = new HttpLink({
     uri: 'http://localhost:8000/graphql',
 });
 
+const authLink = new ApolloLink((operation, forward) => {
+    operation.setContext(({ headers = {} }) => ({
+        headers: {
+            ...headers,
+            'x-token': localStorage.getItem('token'),
+        },
+    }));
+
+    return forward(operation);
+});
+
 const cache = new InMemoryCache();
 
-const errorLink = onError(({ graphQLError, networkError }) => {
-    if (graphQLError) {
-        // do something with graphql error
-        console.log("graphql error", graphQLError);
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors) {
+        graphQLErrors.forEach(({ message, locations, path }) => {
+            console.log('GraphQL error', message);
+
+            if (message === 'NOT_AUTHENTICATED') {
+                signOut(client);
+            }
+        });
     }
 
     if (networkError) {
-        // do somehting with network error
-        console.log("network error", networkError);
+        console.log('Network error', networkError);
+
+        if (networkError.statusCode === 401) {
+            signOut(client);
+        }
     }
 });
-
 const retryLink = new RetryLink();
 /* Defaults
   new RetryLink({
@@ -70,7 +89,7 @@ export const setlistClient = new ApolloClient({
     cache,
 });
 
-const link = ApolloLink.from([errorLink, retryLink, httpLink]);
+const link = ApolloLink.from([authLink, errorLink, retryLink, httpLink]);
 
 export const client = new ApolloClient({
     link,
