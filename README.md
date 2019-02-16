@@ -1,4 +1,4 @@
-# This Concert Fire
+# Roadie
 
 This is a project allows the user to search for concerts using the setlist.fm API, displaying event information on a map using Mapbox's API. Using Spotify's API to gather information about each song and rating the setlist on its popularity. Plus linking each song to it's spoitfy url for easy listening.
 
@@ -6,7 +6,7 @@ This project was build using React (create-react-app) with Apollo Client
 
 Server:
 
-[Node.js with Express](https://github.com/monaco89/thatconcertfire-server) + [Spotify Web API Node](https://github.com/thelinmichael/spotify-web-api-node)
+[Node.js with Express](https://github.com/monaco89/roadie-server) + [Spotify Web API Node](https://github.com/thelinmichael/spotify-web-api-node)
 
 ## To Use
 
