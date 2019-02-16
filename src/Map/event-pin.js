@@ -11,7 +11,6 @@ const pinStyle = {
 };
 
 export default class EventPin extends PureComponent {
-
     render() {
         const { size = 20, onClick } = this.props;
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactMapGL, { Marker, Popup, NavigationControl } from 'react-map-gl';
-
 import EventPin from './event-pin';
 import EventInfo from './event-info';
 
@@ -28,11 +27,11 @@ class Map extends Component {
     };
 
 
-    _updateViewport = (viewport) => {
+    updateViewport = (viewport) => {
         this.setState({ viewport });
     }
 
-    _renderCityMarker = (event, index) => {
+    renderCityMarker = (event, index) => {
         return (
             <Marker
                 key={`marker-${index}`}
@@ -44,7 +43,7 @@ class Map extends Component {
         );
     }
 
-    _renderPopup() {
+    renderPopup() {
         const { popupInfo } = this.state;
 
         return popupInfo && (
@@ -69,14 +68,14 @@ class Map extends Component {
                 {...viewport}
                 mapStyle="mapbox://styles/nickmonaco/cjr9l3agz1shx2snrfk39bh4j"
                 mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-                onViewportChange={this._updateViewport}
+                onViewportChange={this.updateViewport}
             >
-                {events.events.setlist.map(this._renderCityMarker)}
+                {events.events.setlist.map(this.renderCityMarker)}
 
-                {this._renderPopup()}
+                {this.renderPopup()}
 
                 <div className="nav" style={navStyle}>
-                    <NavigationControl onViewportChange={this._updateViewport} />
+                    <NavigationControl onViewportChange={this.updateViewport} />
                 </div>
             </ReactMapGL>
         );

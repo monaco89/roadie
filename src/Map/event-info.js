@@ -5,7 +5,6 @@ import moment from 'moment';
 import * as routes from '../constants/routes';
 
 export default class EventInfo extends PureComponent {
-
     render() {
         const { info } = this.props;
         const displayName = `${info.venue.name}, ${info.venue.city.name}, ${info.venue.city.state}`;
