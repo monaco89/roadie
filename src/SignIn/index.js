@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import ErrorMessage from '../Error';
+import { SignUpLink } from '../SignUp';
 
 import * as routes from '../constants/routes';
 import './Form.css';
@@ -23,7 +24,7 @@ const SignIn = ({ history, refetch }) => (
     <div>
         <h1>Sign In</h1>
         <SignInForm history={history} refetch={refetch} />
-        {/* //TODO Signup link */}
+        <SignUpLink />
     </div>
 );
 

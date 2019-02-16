@@ -16,8 +16,6 @@ import { signOut } from './SignOut';
 
 import './style.css';
 
-registerServiceWorker();
-
 // TODO Move setlist api calls to server
 const corsProxy = 'https://infinite-sierra-19095.herokuapp.com/';
 
@@ -46,7 +44,6 @@ const authLink = new ApolloLink((operation, forward) => {
     return forward(operation);
 });
 
-const cache = new InMemoryCache();
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
@@ -82,6 +79,8 @@ const retryLink = new RetryLink();
   });
 */
 
+const cache = new InMemoryCache();
+
 const setlistLink = ApolloLink.from([errorLink, retryLink, setlistRestLink]);
 
 export const setlistClient = new ApolloClient({
@@ -102,3 +101,5 @@ ReactDOM.render(
     </ApolloProvider>,
     document.getElementById('root')
 );
+
+registerServiceWorker();

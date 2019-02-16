@@ -31,7 +31,9 @@ const NavigationAuth = ({ session }) => (
 const NavigationNonAuth = () => (
     <div className="navbar">
         <Link to={routes.LANDING}><span role="img" aria-label="fire">🔥 </span></Link>
-        <Link to={routes.SIGN_IN}>Sign In</Link>
+        <div>
+            <Link to={routes.SIGN_IN}>Sign In</Link>
+        </div>
     </div>
 );
 
