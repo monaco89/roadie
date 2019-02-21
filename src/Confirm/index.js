@@ -1,9 +1,9 @@
 import React from "react";
-import { Mutation } from "react-apollo";
+import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
 const CONFIRM = gql`
-  mutation($id: String!) {
+  query($id: String!) {
     confirm(id: $id) {
       bool
     }
@@ -11,13 +11,13 @@ const CONFIRM = gql`
 `;
 
 const Confirm = ({ match }) => (
-  <Mutation mutation={CONFIRM} variables={{ id: match.params.id }}>
+  <Query mutation={CONFIRM} variables={{ id: match.params.id }}>
     {({ data, loading, error }) => (
       <div>
         <h2>Thanks for confirming your email address</h2>
       </div>
     )}
-  </Mutation>
+  </Query>
 );
 
 export default Confirm;
