@@ -1,26 +1,27 @@
-import React, { Component } from 'react';
-import { Router, Route } from 'react-router-dom';
-import Navigation from '../Navigation';
-import Events from '../Events';
-import Event from '../Event';
-import SignIn from '../SignIn';
-import SignUp from '../SignUp';
-import withSession from '../Session/withSession';
+import React, { Component } from "react";
+import { Router, Route, Redirect } from "react-router-dom";
+import Navigation from "../Navigation";
+import Events from "../Events";
+import Event from "../Event";
+import SignIn from "../SignIn";
+import SignUp from "../SignUp";
+import Confirm from "../Confirm";
+import withSession from "../Session/withSession";
 
-import * as routes from '../constants/routes';
-import history from '../constants/history';
+import * as routes from "../constants/routes";
+import history from "../constants/history";
 
-import TextField from '@material-ui/core/TextField';
+import TextField from "@material-ui/core/TextField";
 
-import './App.css';
+import "./App.css";
 
 // TODO Better search button
 class App extends Component {
   state = {
-    queryString: '',
+    queryString: ""
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = e => {
     e.preventDefault();
     this.setState({ queryString: e.target[0].value });
   };
@@ -39,7 +40,13 @@ class App extends Component {
             path={routes.LANDING}
             component={() => (
               <div className="App">
-                <h1>That Concert <span role="img" aria-label="fire">🔥 🔥 🔥</span>?</h1>
+                <h1>
+                  That Concert{" "}
+                  <span role="img" aria-label="fire">
+                    🔥 🔥 🔥
+                  </span>
+                  ?
+                </h1>
                 <form onSubmit={this.handleSubmit}>
                   <TextField
                     id="standard-full-width"
@@ -48,14 +55,15 @@ class App extends Component {
                     fullWidth
                     margin="normal"
                     InputLabelProps={{
-                      shrink: true,
+                      shrink: true
                     }}
                   />
                 </form>
                 <br />
-                {queryString && (<Events artist={queryString} />)}
+                {queryString && <Events artist={queryString} />}
               </div>
-            )} />
+            )}
+          />
           <Route path={`${routes.EVENT}/:id`} exact component={Event} />
           <Route
             path={routes.SIGN_IN}
@@ -67,6 +75,8 @@ class App extends Component {
             exact
             component={() => <SignUp refetch={refetch} />}
           />
+          <Route exact path="/confirm/:id" component={Confirm} />
+          <Redirect from="*" to="/" />
         </div>
       </Router>
     );
