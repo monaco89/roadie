@@ -1,13 +1,16 @@
 import React from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
+import ErrorMessage from "../Error";
+
+import "./Confirm.css";
 
 import Button from "@material-ui/core/Button";
 
 const CONFIRM = gql`
-  query($id: String!) {
+  mutation($id: String!) {
     confirm(id: $id) {
-      boolean
+      msg
     }
   }
 `;
@@ -15,7 +18,7 @@ const CONFIRM = gql`
 const Confirm = ({ match }) => (
   <Mutation mutation={CONFIRM} variables={{ id: match.params.id }}>
     {(confirm, { data, loading, error }) => (
-      <div>
+      <div className="confirm">
         <Button
           variant="contained"
           color="primary"
@@ -24,6 +27,9 @@ const Confirm = ({ match }) => (
         >
           Click here to confirm
         </Button>
+        <br />
+        {data && data.confirm.msg}
+        {error && <ErrorMessage error={error} />}
       </div>
     )}
   </Mutation>
