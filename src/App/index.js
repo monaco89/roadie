@@ -6,6 +6,7 @@ import Event from "../Event";
 import SignIn from "../SignIn";
 import SignUp from "../SignUp";
 import Confirm from "../Confirm";
+import Account from "../Account";
 import withSession from "../Session/withSession";
 
 import * as routes from "../constants/routes";
@@ -76,6 +77,7 @@ class App extends Component {
             component={() => <SignUp refetch={refetch} />}
           />
           <Route exact path="/confirm/:id" component={Confirm} />
+          <Route exact path="/user/:id" component={Account} />
         </div>
       </Router>
     );
