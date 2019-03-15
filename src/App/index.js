@@ -7,6 +7,7 @@ import SignIn from "../SignIn";
 import SignUp from "../SignUp";
 import Confirm from "../Confirm";
 import Account from "../Account";
+import TopRated from "../TopRated";
 import withSession from "../Session/withSession";
 
 import * as routes from "../constants/routes";
@@ -62,6 +63,7 @@ class App extends Component {
                 </form>
                 <br />
                 {queryString && <Events artist={queryString} />}
+                <TopRated type={"event"} />
               </div>
             )}
           />
