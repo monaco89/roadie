@@ -2,18 +2,19 @@
 
 This is a project allows the user to search for concerts using the setlist.fm API, displaying event information on a map using Mapbox's API. Using Spotify's API to gather information about each song and rating the setlist on its popularity. Plus linking each song to it's spoitfy url for easy listening.
 
+Users are able to register accounts and like songs and events to build a profile.
+
 This project was build using React (create-react-app) with Apollo Client
 
 Server:
 
-[Node.js with Express](https://github.com/monaco89/roadie-server) + [Spotify Web API Node](https://github.com/thelinmichael/spotify-web-api-node)
+[Node.js with Express](https://github.com/monaco89/roadie-server) + [Spotify Web API Node](https://github.com/thelinmichael/spotify-web-api-node) + [Setlist.fm API Wrapper for Node.js](https://github.com/terhuerne/setlistfm-js)
 
 ## To Use
 
-1. Set spotify, mapbox, & setlist API environment variables 
+1. Set spotify, mapbox, & setlist API environment variables
 2. `yarn install`
 3. `yarn start`
-
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
