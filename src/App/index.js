@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Router, Route, Redirect } from "react-router-dom";
+import { Router, Route } from "react-router-dom";
 import Navigation from "../Navigation";
 import Events from "../Events";
 import Event from "../Event";
@@ -30,7 +30,7 @@ class App extends Component {
   render() {
     const { queryString } = this.state;
     const { session, refetch } = this.props;
-    document.title = "This Concert Fire";
+    document.title = "Roadie";
 
     return (
       <Router history={history}>

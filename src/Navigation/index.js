@@ -21,7 +21,7 @@ const Navigation = ({ session }) => (
 const NavigationAuth = ({ session }) => (
   <div className="navbar">
     <Link to={routes.LANDING}>
-      <span role="img" aria-label="fire">
+      <span role="img" aria-label="music">
         🎵
       </span>
     </Link>
@@ -37,7 +37,7 @@ const NavigationAuth = ({ session }) => (
 const NavigationNonAuth = () => (
   <div className="navbar">
     <Link to={routes.LANDING}>
-      <span role="img" aria-label="fire">
+      <span role="img" aria-label="music">
         🎵{" "}
       </span>
     </Link>
