@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import Loading from "../Loading";
 import ErrorMessage from "../Error";
 import Song from "../Song";
+import EventTeaser from "../Event/EventTeaser";
 
 import Paper from "@material-ui/core/Paper";
 import List from "@material-ui/core/List";
@@ -19,6 +20,18 @@ const GET_RATED = gql`
         sortName
       }
       name
+      album {
+        images {
+          url
+        }
+      }
+      venue {
+        city {
+          name
+          stateCode
+        }
+        name
+      }
     }
   }
 `;
@@ -44,11 +57,17 @@ const TopRated = ({ id, type }) => (
 
       return (
         <Paper>
-          <h2 className="trackList">Top {type}</h2>
+          <h2 className="trackList">
+            Top {type.charAt(0).toUpperCase() + type.slice(1) + "s"}
+          </h2>
           <List className="setlistList">
-            {data.topRated.map((song, index) => (
-              <Song song={song} key={index} artist={data.artist} />
-            ))}
+            {data.topRated.map((item, index) => {
+              return type === "song" ? (
+                <Song song={item} key={index} artist={data.artist} />
+              ) : (
+                <EventTeaser event={item} key={index} />
+              );
+            })}
           </List>
         </Paper>
       );
