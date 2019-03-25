@@ -26,7 +26,7 @@ const NavigationAuth = ({ session }) => (
       </span>
     </Link>
     <div>
-      <Link to={routes.ACCOUNT}>
+      <Link to={`${routes.ACCOUNT}/${session.me.id}`}>
         {session.me.email.substring(0, session.me.email.indexOf("@"))}
       </Link>
       <SignOutButton />

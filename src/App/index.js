@@ -79,7 +79,7 @@ class App extends Component {
             component={() => <SignUp refetch={refetch} />}
           />
           <Route exact path="/confirm/:id" component={Confirm} />
-          <Route exact path="/user/:id" component={Account} />
+          <Route exact path="/account/:id" component={Account} />
         </div>
       </Router>
     );
