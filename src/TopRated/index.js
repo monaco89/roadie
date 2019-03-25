@@ -53,8 +53,6 @@ const TopRated = ({ id, type }) => (
         return <ErrorMessage error={error} />;
       }
 
-      console.log(data);
-
       return (
         <Paper>
           <h2 className="trackList">

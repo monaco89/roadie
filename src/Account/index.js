@@ -34,6 +34,7 @@ const Account = ({ match }) => (
       return (
         <div>
           <h2>{data.user.email}</h2>
+          {/* // TODO Show user's top songs & events */}
         </div>
       );
     }}
