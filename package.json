@@ -16,6 +16,7 @@
     "graphql": "^14.1.1",
     "graphql-anywhere": "^4.1.25",
     "graphql-tag": "^2.10.1",
+    "graphql.macro": "^1.4.2",
     "moment": "^2.24.0",
     "qs": "^6.6.0",
     "react": "^16.7.0",
