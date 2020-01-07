@@ -1,9 +1,11 @@
 import React from "react";
 import { Query } from "react-apollo";
 import { Redirect } from "react-router-dom";
+import { loader } from "graphql.macro";
 
 import * as routes from "../../constants/routes";
-import { GET_ME } from "./queries";
+
+const GET_ME = loader("../../queries/Me.gql");
 
 const withAuthorization = conditionFn => Component => props => (
   <Query query={GET_ME}>

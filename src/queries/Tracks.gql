@@ -1,0 +1,24 @@
+query Tracks($q: [String!]) {
+  searchMultipleTracks(q: $q) {
+    tracks {
+      items {
+        artists {
+          name
+        }
+        name
+        album {
+          name
+          images {
+            url
+          }
+        }
+        popularity
+        duration_ms
+        spotify_url
+      }
+    }
+    meta {
+      rating
+    }
+  }
+}

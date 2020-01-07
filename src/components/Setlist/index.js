@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import Loading from "../Loading";
 import ErrorMessage from "../Error";
 import Song from "../Song";
+import { loader } from "graphql.macro";
 
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
@@ -20,53 +20,7 @@ const styles = theme => ({
   }
 });
 
-// const GET_TRACK = gql`
-//     query($q: String!, $limit: String!) {
-//         searchTracks(q: $q, limit: $limit) {
-//             tracks {
-//                 items {
-//                     artists {
-//                         name
-//                     }
-//                     name
-//                     album {
-//                         images {
-//                             url
-//                         }
-//                     }
-//                     popularity
-//                 }
-//             }
-//         }
-//     }
-// `;
-
-const GET_TRACKS = gql`
-  query($q: [String!]) {
-    searchMultipleTracks(q: $q) {
-      tracks {
-        items {
-          artists {
-            name
-          }
-          name
-          album {
-            name
-            images {
-              url
-            }
-          }
-          popularity
-          duration_ms
-          spotify_url
-        }
-      }
-      meta {
-        rating
-      }
-    }
-  }
-`;
+const GET_TRACKS = loader("../../queries/Tracks.gql");
 
 class Setlist extends Component {
   state = {

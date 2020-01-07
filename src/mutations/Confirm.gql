@@ -1,0 +1,5 @@
+mutation Confirm($id: String!) {
+  confirm(id: $id) {
+    msg
+  }
+}

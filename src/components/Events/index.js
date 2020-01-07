@@ -1,38 +1,12 @@
 import React from "react";
-import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import Loading from "../Loading";
 import ErrorMessage from "../Error";
 import Map from "../Map";
 import { setlistClient } from "../../index";
+import { loader } from "graphql.macro";
 
-const GET_EVENTS = gql`
-  query events($path: String!) {
-    events @rest(type: "Events", path: $path) {
-      setlist @type(name: "setlist") {
-        id
-        eventDate
-        tour @type(name: "tour") {
-          name
-        }
-        artist @type(name: "artist") {
-          name
-        }
-        venue @type(name: "venue") {
-          name
-          city @type(name: "city") {
-            name
-            state
-            coords @type(name: "coords") {
-              lat
-              long
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+const GET_EVENTS = loader("../../queries/Events.gql");
 
 const Events = ({ artist }) => (
   <Query

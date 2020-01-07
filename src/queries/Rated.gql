@@ -1,0 +1,24 @@
+query Rated($id: String, $type: String!) {
+  topRated(id: $id, type: $type) {
+    id
+    date
+    artist {
+      name
+      mbid
+      sortName
+    }
+    name
+    album {
+      images {
+        url
+      }
+    }
+    venue {
+      city {
+        name
+        stateCode
+      }
+      name
+    }
+  }
+}

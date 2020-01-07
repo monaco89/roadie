@@ -1,16 +1,10 @@
 import React from "react";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import Loading from "../Loading";
 import ErrorMessage from "../Error";
+import { loader } from "graphql.macro";
 
-const GET_USER = gql`
-  query($id: ID!) {
-    user(id: $id) {
-      email
-    }
-  }
-`;
+const GET_USER = loader("../../queries/User.gql");
 
 const Account = ({ match }) => (
   <Query

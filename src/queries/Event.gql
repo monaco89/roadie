@@ -1,0 +1,29 @@
+query Event($path: String!) {
+  event @rest(type: "Event", path: $path) {
+    tour @type(name: "tour") {
+      name
+    }
+    artist @type(name: "artist") {
+      name
+    }
+    sets @type(name: "sets") {
+      set @type(name: "set") {
+        song @type(name: "song") {
+          name
+          cover @type(name: "song_cover") {
+            name
+          }
+        }
+        encore
+      }
+    }
+    venue @type(name: "venue") {
+      name
+      city @type(name: "venue_city") {
+        name
+        state
+      }
+    }
+    eventDate
+  }
+}

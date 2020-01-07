@@ -1,40 +1,15 @@
 import React from "react";
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import Loading from "../Loading";
 import ErrorMessage from "../Error";
 import Song from "../Song";
 import EventTeaser from "../Event/EventTeaser";
+import { loader } from "graphql.macro";
 
 import Paper from "@material-ui/core/Paper";
 import List from "@material-ui/core/List";
 
-const GET_RATED = gql`
-  query($id: String, $type: String!) {
-    topRated(id: $id, type: $type) {
-      id
-      date
-      artist {
-        name
-        mbid
-        sortName
-      }
-      name
-      album {
-        images {
-          url
-        }
-      }
-      venue {
-        city {
-          name
-          stateCode
-        }
-        name
-      }
-    }
-  }
-`;
+const GET_RATED = loader("../../queries/Rated.gql");
 
 const TopRated = ({ id, type }) => (
   <Query

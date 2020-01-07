@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import moment from "moment";
 import Loading from "../Loading";
@@ -7,43 +6,14 @@ import ErrorMessage from "../Error";
 import Rating from "../Rating";
 import Setlist from "../Setlist";
 import { setlistClient } from "../../index";
+import { loader } from "graphql.macro";
 
 import Grid from "@material-ui/core/Grid";
 
 import "./Event.css";
 
 // Query setlist id
-const GET_EVENT = gql`
-  query event($path: String!) {
-    event @rest(type: "Event", path: $path) {
-      tour @type(name: "tour") {
-        name
-      }
-      artist @type(name: "artist") {
-        name
-      }
-      sets @type(name: "sets") {
-        set @type(name: "set") {
-          song @type(name: "song") {
-            name
-            cover @type(name: "song_cover") {
-              name
-            }
-          }
-          encore
-        }
-      }
-      venue @type(name: "venue") {
-        name
-        city @type(name: "venue_city") {
-          name
-          state
-        }
-      }
-      eventDate
-    }
-  }
-`;
+const GET_EVENT = loader("../../queries/Event.gql");
 
 class Event extends Component {
   state = {

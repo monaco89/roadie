@@ -1,6 +1,8 @@
 import React from "react";
 import { Query } from "react-apollo";
-import { GET_ME } from "./queries";
+import { loader } from "graphql.macro";
+
+const GET_ME = loader("../../queries/Me.gql");
 
 // TODO Use Apollo Link State for Session
 const withSession = Component => props => (

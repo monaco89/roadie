@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 import ErrorMessage from "../Error";
 import { SignUpLink } from "../SignUp";
+import { loader } from "graphql.macro";
 
 import * as routes from "../../constants/routes";
 import "./Form.css";
@@ -12,13 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 
-const SIGN_IN = gql`
-  mutation($login: String!, $password: String!) {
-    signIn(login: $login, password: $password) {
-      token
-    }
-  }
-`;
+const SIGN_IN = loader("../../mutations/SignIn.gql");
 
 const SignIn = ({ history, refetch }) => (
   <div>
